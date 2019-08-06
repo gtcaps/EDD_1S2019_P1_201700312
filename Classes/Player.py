@@ -9,3 +9,9 @@ class Player:
 
     def get_score(self):
         return self.score
+
+    def set_name(self,name):
+        self.name = name
+
+    def set_score(self,score):
+        self.score = score
