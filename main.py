@@ -2,6 +2,7 @@ from Structures.Queue import Queue
 from Classes.Player import Player
 from Structures.DoubleLinkedList import DoubleLinkedList
 from Structures.Stack import Stack
+from Structures.DoubleCircularList import DoubleCircularList
 
 
 #my_queue = Queue()
@@ -20,33 +21,18 @@ from Structures.Stack import Stack
 #my_list.insert_in_back(30, 30)
 #my_list.view_list()
 
-my_stack = Stack()
-my_stack.push(10, 20)
-my_stack.push(15, 20)
-my_stack.push(25, 20)
-my_stack.push(35, 20)
-my_stack.view_stack()
-print("Stack Size: " + str( my_stack.size ))
+#my_stack = Stack()
+#my_stack.push(10, 20)
+#my_stack.push(15, 20)
+#my_stack.push(25, 20)
+#my_stack.push(35, 20)
+#my_stack.view_stack()
 
-print("\n")
-my_stack.pop()
-my_stack.view_stack()
-print("Stack Size: " + str( my_stack.size ))
-
-print("\n")
-my_stack.pop()
-my_stack.view_stack()
-print("Stack Size: " + str( my_stack.size ))
-
-print("\n")
-my_stack.pop()
-my_stack.view_stack()
-print("Stack Size: " + str( my_stack.size ))
-
-print("\n")
-my_stack.pop()
-my_stack.view_stack()
-print("Stack Size: " + str( my_stack.size ))
-
-
+my_list = DoubleCircularList()
+my_list.add("Juan")
+my_list.add("Pedro")
+my_list.add("Roberto")
+my_list.add("Adrian")
+my_list.add("Miguel")
+my_list.view_list()
 
