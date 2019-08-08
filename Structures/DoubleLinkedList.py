@@ -1,6 +1,9 @@
 from Nodes.DoubleLinkedNode import DoubleLinkedNode
+import os
 
 class DoubleLinkedList:
+    times = 0
+
     def __init__(self):
         self.head = None
         self.tail = None
@@ -60,3 +63,40 @@ class DoubleLinkedList:
             list2 += " ---> [{} , {}] ".format(aux_tail.position.x_position, aux_tail.position.y_position)
             aux_tail = aux_tail.behind
         print(list2)
+
+    def graph(self):
+        aux_head = self.head
+        self.times += 1
+        cont = 1
+
+        file = open("double-list-{}.dot".format(self.times), "w")
+        file.write("digraph DoubleList{\n")
+        file.write("    rankdir = LR;\n")
+        file.write("    subgraph cluster_0 {\n")
+
+        if aux_head is not None:
+            string_next = '        snake0 -> snake1 [color="none"];\n        snake1 -> snake0;\n'
+            file.write('        snake0[ shape = record, label = " { | NULL | } "];\n')
+            file.write('        snake00[ shape = record, label = " { | NULL | } "];\n')
+
+            while aux_head is not None:
+                file.write('        snake{}[ shape = record, label = " {{ | ({},{}) | }} " ];\n'.format(cont,aux_head.position.x_position,aux_head.position.y_position))
+
+                if cont + 1 > self.size:
+                    string_next += '        snake{} -> snake00;\n'.format(cont)
+                else:
+                    string_next += '        snake{} -> snake{};\n'.format(cont, cont + 1)
+                    string_next += '        snake{} -> snake{};\n'.format(cont + 1, cont)
+                aux_head = aux_head.next
+                cont += 1
+            file.write(string_next)
+        else:
+            file.write('        snake0[ shape = record, label = " { | Empty | } "];\n')
+
+        file.write('        label = "Lista Doble del Snake";')
+        file.write("    }")
+        file.write("}")
+        file.close()
+
+        os.system("dot -Tpng double-list-{a}.dot -o double-list-{a}.png".format(a=self.times))
+        os.system("double-list-{}.png".format(self.times))
