@@ -1,8 +1,11 @@
 from Nodes.QueueNode import QueueNode
 from Classes.Player import Player
+import os
 
 
 class Queue:
+    times = 0
+
     def __init__(self):
         self.head = None
         self.tail = None
@@ -38,5 +41,39 @@ class Queue:
                 aux_head = aux_head.next
         else:
             print("Empty")
+
+    def graph(self):
+        self.times += 1
+        aux_head = self.head
+        cont = 1
+        string = ""
+
+        file = open("queue-{}.dot".format(self.times), "w")
+        file.write("digraph queue{\n")
+        file.write("    rankdir = LR;\n")
+        file.write("    subgraph cluster_queue{\n")
+
+        while aux_head is not None:
+
+            if aux_head.next is None:
+                file.write('        queue_node{}[  shape = record, label = " {{  ({} , {}) |  }}  " ];\n'.format(cont,aux_head.player.name,aux_head.player.score))
+                file.write('        queue_node{}[  shape = record, label = " {{  Null  }}  " ];\n'.format(cont + 1))
+            else:
+                file.write('        queue_node{}[  shape = record, label = " {{  ({} , {}) |  }}  " ];\n'.format(cont,aux_head.player.name, aux_head.player.score))
+
+            string += "        queue_node{} -> queue_node{} ;\n".format(cont, cont + 1)
+            aux_head = aux_head.next
+            cont += 1
+
+        file.write(string)
+        file.write('        label = "Cola de Jugadores {}" '.format(self.times))
+        file.write("    }\n")
+        file.write("}")
+        file.close()
+
+        os.system("dot -Tpng queue-{a}.dot -o queue-{a}.png".format(a=self.times))
+        os.system("queue-{}.png".format(self.times))
+
+
 
 
