@@ -3,14 +3,18 @@ from Classes.Player import Player
 from Structures.DoubleLinkedList import DoubleLinkedList
 from Structures.Stack import Stack
 from Structures.DoubleCircularList import DoubleCircularList
+from Classes.BulkLoading import BulkLoading
+
+lista_usuarios = BulkLoading("usuarios")
+lista_usuarios.graph()
 
 
-my_queue = Queue()
-my_queue.enqueue("Aybson",50)
-my_queue.enqueue("Pedro",20)
-my_queue.enqueue("Cr7",30)
-my_queue.view()
-my_queue.graph()
+#my_queue = Queue()
+#my_queue.enqueue("Aybson",50)
+#my_queue.enqueue("Pedro",20)
+#my_queue.enqueue("Cr7",30)
+#my_queue.view()
+#my_queue.graph()
 
 #my_list =DoubleLinkedList()
 #my_list.insert_in_front(10, 54)
