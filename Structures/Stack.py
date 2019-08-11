@@ -33,7 +33,7 @@ class Stack:
             print("[ " + str(aux_top.position.x_position) + " , " + str( aux_top.position.y_position ) + " ]" )
             aux_top = aux_top.down
 
-    def graph(self):
+    def graph(self, level):
         self.times += 1
         aux_head = self.top
 
@@ -55,7 +55,7 @@ class Stack:
         file.write("    rankdir = LR;\n")
         file.write("    subgraph cluster_stack{\n")
         file.write('        stack_node[ shape = record, label = " {} " ];\n'.format(string))
-        file.write('        label = "Pila de Puntos {}" \n'.format(self.times))
+        file.write('        label = "{} - Pila de Puntos {}" \n'.format(level,self.times))
         file.write("    }\n")
         file.write("}")
         file.close()
