@@ -22,6 +22,21 @@ level3 = Stack()
 #SCOREBOARD QUEUE
 scoreboard_queue = Queue()
 
+def init_structures(window):
+    global  snake_list, players_list
+    height, width = window.getmaxyx()
+
+    players_list = DoubleCircularList()
+
+    # DEFINE THE FIRST 3 NODES OF THE SNAKE AND INSERT INTO THE LIST
+    snake_list = DoubleLinkedList()
+    first_node = Position((width / 2) + 2, (height / 2))
+    second_node = Position((width / 2), (height / 2))
+    third_node = Position((width / 2) - 2, (height / 2))
+
+    snake_list.insert_in_back(first_node.x_position, first_node.y_position)
+    snake_list.insert_in_back(second_node.x_position, second_node.y_position)
+    snake_list.insert_in_back(third_node.x_position, third_node.y_position)
 
 def defaultSetting(window):
     window.border(0)
@@ -133,14 +148,15 @@ def code_direction(strring):
         return 76
     return None
 
+#FALTA LAS COMIDAS
 def game(window, player_selected, x):
-    global  snake_list
+    global snake_list, level1, level2, level3
     window.border(0)
     setTitle(window, " SNAKE RELOADED ", x)
+    window.addstr(49, 4, "[ESC] to pause")
     window.addstr(0, 4, "Score : " + str(player_selected.score))
     window.addstr(0, 96, "Player: " + player_selected.name.strip())
     window.addstr(48, x("[I] = UP       [K] = DOWN       [L] = RIGHT       [J] = LEFT"), "[I] = UP       [K] = DOWN       [L] = RIGHT       [J] = LEFT")
-    window.addstr(49, 4, "[ESC] to pause")
     window.nodelay(1)
     window.timeout(100)
 
@@ -148,15 +164,6 @@ def game(window, player_selected, x):
     height, width = window.getmaxyx()
     textpad.rectangle(window, 2, 3, height - 3, width - 3)
 
-    #DEFINE THE FIRST 3 NODES OF THE SNAKE AND INSERT INTO THE LIST
-    snake_list = DoubleLinkedList()
-    first_node = Position((width/2) + 2, (height/2))
-    second_node= Position((width / 2), (height / 2))
-    third_node = Position((width / 2) - 2, (height / 2))
-
-    snake_list.insert_in_back(first_node.x_position,first_node.y_position)
-    snake_list.insert_in_back(second_node.x_position, second_node.y_position)
-    snake_list.insert_in_back(third_node.x_position, third_node.y_position)
 
     #DEFINE THE DEFAULT DIRECTION OF THE SNAKE
     direction = "right"
@@ -189,15 +196,38 @@ def game(window, player_selected, x):
         elif key == 75 or key == 107: #K DOWN <-----------------------------------------------------------------------
             direction = "down"
             new_head = Position(head_snake.x_position, head_snake.y_position + 1)
-        elif key == 8:
-            snake_list.graph()
         elif key == 27:
             window.nodelay(0)
+            string = "[1] = MAIN MENU         [2] = GRAPH THE SNAKE LIST         [3] = GRAPH THE STACK SCORE"
+            window.addstr(height - 2, int((width/2) - (len(string)/2)), string)
+            window.addstr(height - 1, 4, "[ESC] to resume")
+            title = "SNAKE RELOADED - PAUSE"
+            window.addstr(0, int((width/2) - (len(title)/2)), title)
             while 1:
                 key_ans = window.getch()
+                res = False
                 if key_ans == 27:
                     window.nodelay(1)
-                    break 
+                    string = "                                                                                              "
+                    window.addstr(height - 2, int((width / 2) - (len(string) / 2)), string)
+                    menu_options = "[I] = UP       [K] = DOWN       [L] = RIGHT       [J] = LEFT"
+                    window.addstr(height - 2, int((width/2) - (len(menu_options)/2)), menu_options)
+                    title = "    SNAKE RELOADED    "
+                    window.addstr(0, int((width / 2) - (len(title) / 2)), title)
+                    window.addstr(height - 1, 4, "[ESC] to pause ")
+                    window.refresh()
+                    break
+                elif key_ans == 49:
+                    window.clear()
+                    res = True
+                    menu(window, 0)
+                    break
+                elif key_ans == 50:
+                    snake_list.graph()
+                elif key_ans == 51:
+                    level1.graph("Level 1")
+            if res:
+                break
         if new_head.x_position is (width - 4):
             new_head.x_position = 4
         elif new_head.x_position is 4:
@@ -214,10 +244,33 @@ def game(window, player_selected, x):
         window.addstr(last.position.y_position, last.position.x_position, " ")
         snake_list.delete_in_back()
 
-
-
         window.refresh()
 
+def reports_window(window):
+    x, y = defaultSetting(window)
+    setTitle(window, "Snake Reloaded - Reports", x)
+    window.addstr(y - 15, x("------- REPORTS -------") , "------- REPORTS -------")
+    window.addstr(y - 10, x("------- REPORTS -------") - 3, "PRESS KEY [1] = SNAKE REPORT")
+    window.addstr(y - 8, x("------- REPORTS -------") - 3, "PRESS KEY [2] = SCORE REPORT")
+    window.addstr(y - 6, x("------- REPORTS -------") - 3, "PRESS KEY [3] = SCOREBOARD REPORT")
+    window.addstr(y - 4, x("------- REPORTS -------") - 3, "PRESS KEY [4] = USERS REPORT")
+    window.addstr(y , x("PRESS KEY [ESC] TO BACK TO MAIN MENU"), "PRESS KEY [ESC] TO BACK TO MAIN MENU")
+
+    while 1:
+        key = window.getch()
+
+        if key == 49:
+            snake_list.graph()
+        elif key == 50:
+            scoreboard_queue.graph()
+        elif key == 51:
+            level1.graph("Level 1")
+        elif key == 52:
+            players_list.graph()
+        elif key == 27:
+            window.clear()
+            menu(window, 3)
+            break
 
 def user_selection(window):
     global players_list, player_selected
@@ -230,7 +283,7 @@ def user_selection(window):
     setTitle(window, "Snake Reloaded - User Selection", x)
     window.addstr(y - 7, x("<-------ACTUAL PLAYER: {}------->".format(player.name.strip())),"<-------ACTUAL PLAYER: {}------->".format(player.name.strip()))
     window.addstr(y + 1, x("Press [ESC] to back to the main menu"), "Press [ESC] to back to the main menu")
-    if players_list is None:
+    if players_list is None or players_list.size is 0:
         window.addstr(y - 3, x("ANY USER, CHARGE A .CSV FILE IN A BULK LOADING OPTION OR CREATE A NEW USER"),"ANY USER, CHARGE A .CSV FILE IN A BULK LOADING OPTION OR CREATE A NEW USER")
     else:
         user = players_list.head
@@ -264,12 +317,15 @@ def user_selection(window):
             window.addstr(y - 3, 40, "(K) <---")
             window.addstr(y, x("Press [Enter] to select a player"), "Press [Enter] to select a player")
         elif key_s == curses.KEY_ENTER or key_s in [10, 13] and players_list is not None:
-            window.addstr(y - 3, x(user.player.name), user.player.name)
-            window.addstr(y - 3, 70, "---> (L)")
-            window.addstr(y - 3, 40, "(K) <---")
-            window.addstr(y, x("Player Selected"), "Player Selected")
-            player = player_selected = user.player
-            window.addstr(y - 7, x("<-------ACTUAL PLAYER: {}------->".format(player.name.strip())),"<-------ACTUAL PLAYER: {}------->".format(player.name.strip()))
+            if(players_list.size is not 0):
+                window.addstr(y - 3, x(user.player.name), user.player.name)
+                window.addstr(y - 3, 70, "---> (L)")
+                window.addstr(y - 3, 40, "(K) <---")
+                window.addstr(y, x("Player Selected"), "Player Selected")
+                player = player_selected = user.player
+                window.addstr(y - 7, x("<-------ACTUAL PLAYER: {}------->".format(player.name.strip())),"<-------ACTUAL PLAYER: {}------->".format(player.name.strip()))
+            else:
+                window.addstr(y - 3, x("ANY USER, CHARGE A .CSV FILE IN A BULK LOADING OPTION OR CREATE A NEW USER"),"ANY USER, CHARGE A .CSV FILE IN A BULK LOADING OPTION OR CREATE A NEW USER")
         else:
             if players_list is None:
                 window.addstr(y - 3, x("ANY USER, CHARGE A .CSV FILE IN A BULK LOADING OPTION OR CREATE A NEW USER"),"ANY USER, CHARGE A .CSV FILE IN A BULK LOADING OPTION OR CREATE A NEW USER")
@@ -286,6 +342,8 @@ def user_selection(window):
 def bulk_loading_users(window):
     name_file = ""
     global players_list
+    window.nodelay(0)
+    window.timeout(-5)
     while 1:
         x, y = defaultSetting(window)
         y = y - 4
@@ -333,7 +391,7 @@ def main(stdscr):
     curses.curs_set(0)
     curses.resize_term(50,120)
     window = curses.newwin(50, 120, 0, 0)
-
+    init_structures(window)
     stdscr.keypad(True)
 
 
@@ -363,6 +421,8 @@ def main(stdscr):
                 snake(window)
             elif opt_selected is 2:
                 user_selection(window)
+            elif opt_selected is 3:
+                reports_window(window)
             elif opt_selected is 4:
                 bulk_loading_users(window)
             elif opt_selected is 5:

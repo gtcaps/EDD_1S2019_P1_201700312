@@ -72,6 +72,8 @@ class DoubleCircularList:
             cont += 1
             aux_head = aux_head.next
 
+        if self.head is None:
+            file.write('        player[ shape = record, label = " { | Empty | } " ];\n')
         file.write(string_next)
         file.write('        label = "Lista Doblemente Enlazada de Jugadores";')
         file.write("    }")

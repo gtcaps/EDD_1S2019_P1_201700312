@@ -65,6 +65,9 @@ class Queue:
             aux_head = aux_head.next
             cont += 1
 
+        if self.head is None:
+            file.write('        queue_node[  shape = record, label = " {{  Empty  }}  " ];\n')
+
         file.write(string)
         file.write('        label = "Cola de Jugadores {}" '.format(self.times))
         file.write("    }\n")
