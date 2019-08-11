@@ -1,0 +1,7 @@
+digraph stack{
+    rankdir = LR;
+    subgraph cluster_stack{
+        stack_node[ shape = record, label = " Empty " ];
+        label = "Level 1 - Pila de Puntos 2" 
+    }
+}

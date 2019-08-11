@@ -1,0 +1,4 @@
+digraph DoubleCircularList{
+    rankdir = LR;
+    subgraph cluster_0 {        edge [color="black", minlen="3.0"];        player[ shape = record, label = " { | Empty | } " ];
+        label = "Lista Doblemente Enlazada de Jugadores";    }}

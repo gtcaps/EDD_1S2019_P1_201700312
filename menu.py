@@ -10,7 +10,6 @@ from Classes.Position import Position
 
 #PLAYER WHO PLAY THE GAME
 player_selected = None
-
 #PLAYERS_CIRCULAR LIST STRUCTURE
 players_list = None
 #SNAKE DOUBLE LIST STRUCTURE
@@ -21,6 +20,9 @@ level2 = Stack()
 level3 = Stack()
 #SCOREBOARD QUEUE
 scoreboard_queue = Queue()
+
+#VELOCITY OF THE GAME
+velocity = 300
 
 def init_structures(window):
     global  snake_list, players_list
@@ -46,6 +48,21 @@ def defaultSetting(window):
     y_center = int(height_size / 2)
 
     return x_center, y_center
+
+def velocity_level(level):
+    if level is 1 or 0:
+        default_velocity = 300
+    elif level > 1:
+        cont = level
+        while cont > 0:
+            if default_velocity > 100:
+                default_velocity -= 100
+            else:
+                default_velocity -= 50
+            cont -= 1
+    return int(default_velocity)
+
+velocity = velocity_level(1)
 
 def setTitle(window, title, x):
     window.addstr(0, x(title), title)
@@ -150,7 +167,7 @@ def code_direction(strring):
 
 #FALTA LAS COMIDAS
 def game(window, player_selected, x):
-    global snake_list, level1, level2, level3
+    global snake_list, level1, level2, level3, velocity
     window.border(0)
     setTitle(window, " SNAKE RELOADED ", x)
     window.addstr(49, 4, "[ESC] to pause")
@@ -158,7 +175,7 @@ def game(window, player_selected, x):
     window.addstr(0, 96, "Player: " + player_selected.name.strip())
     window.addstr(48, x("[I] = UP       [K] = DOWN       [L] = RIGHT       [J] = LEFT"), "[I] = UP       [K] = DOWN       [L] = RIGHT       [J] = LEFT")
     window.nodelay(1)
-    window.timeout(100)
+    window.timeout(velocity)
 
     #DEFINE THE GAME AREA
     height, width = window.getmaxyx()
@@ -262,9 +279,9 @@ def reports_window(window):
         if key == 49:
             snake_list.graph()
         elif key == 50:
-            scoreboard_queue.graph()
-        elif key == 51:
             level1.graph("Level 1")
+        elif key == 51:            
+            scoreboard_queue.graph()
         elif key == 52:
             players_list.graph()
         elif key == 27:
