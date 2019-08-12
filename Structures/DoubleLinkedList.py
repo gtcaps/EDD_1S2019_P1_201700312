@@ -93,8 +93,9 @@ class DoubleLinkedList:
         else:
             file.write('        snake0[ shape = record, label = " { | Empty | } "];\n')
 
-        file.write('        label = "Lista Doble del Snake";')
-        file.write("    }")
+        file.write('        label = "Lista Doble del Snake";\n')
+        file.write("    }\n")
+        file.write('    label = "Size of the snake = {} nodes"'.format(self.size))
         file.write("}")
         file.close()
 

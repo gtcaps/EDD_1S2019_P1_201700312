@@ -1,6 +1,0 @@
-digraph queue{
-    rankdir = LR;
-    subgraph cluster_queue{
-        queue_node[  shape = record, label = " {{  Empty  }}  " ];
-        label = "Cola de Jugadores 1"     }
-}
